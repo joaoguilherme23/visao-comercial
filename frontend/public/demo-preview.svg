@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Prévia ilustrativa da Visão Comercial">
+  <rect width="1200" height="675" fill="#0b0f19"/>
+  <rect x="80" y="70" width="1040" height="535" rx="28" fill="#121a28" stroke="#1d3440" stroke-width="3"/>
+  <rect x="125" y="120" width="320" height="26" rx="13" fill="#13b8b0" opacity=".9"/>
+  <rect x="125" y="185" width="950" height="20" rx="10" fill="#365061"/>
+  <rect x="125" y="230" width="250" height="290" rx="18" fill="#162235"/>
+  <rect x="405" y="230" width="250" height="290" rx="18" fill="#162235"/>
+  <rect x="685" y="230" width="250" height="290" rx="18" fill="#162235"/>
+  <circle cx="1000" cy="375" r="72" fill="#13b8b0" opacity=".75"/>
+  <text x="125" y="575" fill="#d8f7f4" font-family="Arial, sans-serif" font-size="38" font-weight="700">Visão Comercial · demonstração local</text>
+</svg>

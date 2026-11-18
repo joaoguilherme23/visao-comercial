@@ -1,0 +1,55 @@
+name: public-preview-x9
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: "no"
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --save "" --appendonly no
+    restart: "no"
+
+  api:
+    build:
+      context: ./backend
+    env_file: .env
+    command: >-
+      sh -c "python bootstrap_local.py && alembic stamp head && python seed_demo.py &&
+      uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    ports:
+      - "127.0.0.1:8311:8000"
+    restart: "no"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: /api/v1
+        VITE_OIDC_ENABLED: "false"
+        NGINX_CONFIG: nginx.local.conf
+    depends_on:
+      api:
+        condition: service_started
+    ports:
+      - "127.0.0.1:8310:80"
+    restart: "no"
+
+volumes:
+  postgres-data:

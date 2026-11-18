@@ -1,0 +1,409 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── CSS Custom Properties ────────────────────────────────────────────────── */
+:root,
+[data-theme="dark"] {
+  --bg-base:         #101112;
+  --bg-sidebar:      #0b0c0d;
+  --bg-surface:      #151718;
+  --bg-card:         #17191a;
+  --bg-elevated:     #202324;
+  --bg-deep:         #0b0c0d;
+  --bg-hover:        rgba(255,255,255,0.05);
+  --border:          #2d3335;
+  --border-subtle:   #373e40;
+  --border-muted:    #586265;
+  --text-1:          #f1f5f9;
+  --text-2:          #94a3b8;
+  --text-3:          #64748b;
+  --text-4:          #374151;
+  --scrollbar:       #374151;
+  --scrollbar-hover: #4b5563;
+  --input-bg:        #17191a;
+  --input-border:    #373e40;
+  --dropdown-bg:     #17191a;
+  --tooltip-bg:      #202324;
+  --tooltip-border:  #373e40;
+  --toast-bg:        #202324;
+  --toast-text:      #f3f4f6;
+  --toast-border:    #373e40;
+  --brand-glow:      rgba(37,200,189,0.12);
+  --card-shadow:     none;
+  --card-shadow-hover: none;
+
+  /* Cores semânticas — espelham src/lib/semanticColors.ts. Sempre que possível,
+     componente usa `semanticColors` (TS) pra dado dinâmico. Estas vars são pra
+     casos onde a cor vem direto em className/style. */
+  --color-hot:       #ef4444;
+  --color-warm:      #f97316;
+  --color-cold:      #25c8bd;
+  --color-pos:       #22c55e;
+  --color-neu:       #94a3b8;
+  --color-neg:       #ef4444;
+  --color-up:        #4ade80;
+  --color-down:      #f87171;
+  --color-flat:      #94a3b8;
+  --color-fast:      #22c55e;
+  --color-medium:    #facc15;
+  --color-slow:      #ef4444;
+
+  /* Skeleton shimmer — gradient que desliza */
+  --skeleton-base:   #202324;
+  --skeleton-hi:     #2c3133;
+
+  /* ───────────────────────────────────────────────────────────────────────
+     Brand Tokens v2 (Fase 2) — provisionados, sem uso imediato.
+     Ver /dev/brand pra documentação completa. Valores vêm da decisão
+     aprovada em bloco: signal #10E088, gradient-brand #0b9692 → #087f7c,
+     wordmark X9 com "9" em gradient-brand nos hero moments.
+     ─────────────────────────────────────────────────────────────────── */
+
+  /* Brand scale — adições (200 e 800 novos; next-* provisionam migração) */
+  --brand-200:           #92f2e9;
+  --brand-300:           #58e2d8;
+  --brand-400:           #27cfc5;
+  --brand-500:           #25c8bd;
+  --brand-600:           #1ab4aa;
+  --brand-700:           #15948e;
+  --brand-800:           #117572;
+  --brand-next-500:      #25c8bd;
+  --brand-next-600:      #15948e;
+
+  /* Signal Success — escala nova (NÃO confundir com --color-pos que é
+     usado pra sentimento de leads em gráficos/KPIs) */
+  --signal-success-50:   #E8FBF3;
+  --signal-success-100:  #CAF5E0;
+  --signal-success-300:  #5CEAB0;
+  --signal-success-500:  #10E088;
+  --signal-success-600:  #0BBF72;
+  --signal-success-700:  #088F55;
+  --signal-success-900:  #033821;
+
+  /* Gradientes canônicos */
+  --gradient-brand:       linear-gradient(135deg, #25c8bd 0%, #117572 100%);
+  --gradient-brand-deep:  linear-gradient(135deg, #1ab4aa 0%, #0b5559 100%);
+  --gradient-signal-flow: linear-gradient(90deg, #10E088 0%, #0BBF72 50%, #10E088 100%);
+
+  /* Glows — intensidades */
+  --glow-brand-sm:    none;
+  --glow-brand-md:    none;
+  --glow-brand-lg:    none;
+  --glow-success-sm:  none;
+  --glow-success-md:  none;
+
+  /* Elevations — 4 níveis canônicos. Valores pensados pro tema escuro;
+     light-mode override em shadow-2xl/xl/lg continua válido pra cards
+     legados que ainda não migraram pra shadow-elevation-*. */
+  --shadow-elevation-1: 0 1px 2px rgba(0,0,0,0.28);
+  --shadow-elevation-2: 0 2px 6px rgba(0,0,0,0.34), 0 1px 2px rgba(0,0,0,0.22);
+  --shadow-elevation-3: 0 6px 16px rgba(0,0,0,0.42), 0 2px 4px rgba(0,0,0,0.26);
+  --shadow-elevation-4: 0 16px 40px rgba(0,0,0,0.52), 0 4px 8px rgba(0,0,0,0.32);
+
+  /* Surfaces elevados (aliases semânticos dos bg atuais) */
+  --surface-0:       var(--bg-base);
+  --surface-1:       var(--bg-card);
+  --surface-2:       var(--bg-elevated);
+  --surface-3:       #202324;
+  --surface-4:       #2c3133;
+  --surface-brand:   rgba(37, 200, 189, 0.08);
+
+  /* Accent primary — agora declarada (antes só fallback hardcoded no código) */
+  --accent-primary:  #25c8bd;
+}
+
+[data-theme="light"] {
+  --bg-base:         #f1f5f9;
+  --bg-sidebar:      #ffffff;
+  --bg-surface:      #ffffff;
+  --bg-card:         #ffffff;
+  --bg-elevated:     #f8fafc;
+  --bg-deep:         #f1f5f9;
+  --bg-hover:        rgba(241,245,249,0.9);
+  --border:          #e2e8f0;
+  --border-subtle:   #cbd5e1;
+  --border-muted:    #94a3b8;
+  --text-1:          #0f172a;
+  --text-2:          #475569;
+  --text-3:          #94a3b8;
+  --text-4:          #cbd5e1;
+  --scrollbar:       #cbd5e1;
+  --scrollbar-hover: #94a3b8;
+  --input-bg:        #f8fafc;
+  --input-border:    #e2e8f0;
+  --dropdown-bg:     #ffffff;
+  --tooltip-bg:      #1e293b;
+  --tooltip-border:  #334155;
+  --toast-bg:        #1e293b;
+  --toast-text:      #f1f5f9;
+  --toast-border:    #334155;
+  --brand-glow:      rgba(11,150,146,0.08);
+  --color-cold:      #0b9692;
+  --brand-200:       #92f2e9;
+  --brand-300:       #58e2d8;
+  --brand-400:       #27cfc5;
+  --brand-500:       #0b9692;
+  --brand-600:       #087f7c;
+  --brand-700:       #0c7776;
+  --brand-800:       #105f60;
+  --brand-next-500:  #0b9692;
+  --brand-next-600:  #0c7776;
+  --gradient-brand:  linear-gradient(135deg, #0b9692 0%, #0c7776 100%);
+  --gradient-brand-deep: linear-gradient(135deg, #087f7c 0%, #105f60 100%);
+  --glow-brand-sm:   none;
+  --glow-brand-md:   none;
+  --glow-brand-lg:   none;
+  --accent-primary: #0b9692;
+  --card-shadow:     none;
+  --card-shadow-hover: none;
+
+  /* Cores semânticas — mesmo mapa do dark (são valores absolutos que
+     funcionam em ambos os temas; ver src/lib/semanticColors.ts). */
+  --color-hot:       #ef4444;
+  --color-warm:      #f97316;
+  --color-cold:      #3b82f6;
+  --color-pos:       #16a34a;
+  --color-neu:       #64748b;
+  --color-neg:       #dc2626;
+  --color-up:        #16a34a;
+  --color-down:      #dc2626;
+  --color-flat:      #64748b;
+  --color-fast:      #16a34a;
+  --color-medium:    #ca8a04;
+  --color-slow:      #dc2626;
+
+  /* Skeleton shimmer no claro é mais sutil */
+  --skeleton-base:   #e2e8f0;
+  --skeleton-hi:     #f1f5f9;
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────────── */
+@layer base {
+  * {
+    box-sizing: border-box;
+    /* Todo número fica com largura consistente por dígito — tabelas e KPIs
+       alinham sem precisar de monospace. */
+    font-variant-numeric: tabular-nums;
+  }
+  html {
+    height: 100%;
+    /* Global ~9% zoom: escala proporcionalmente todos os valores em `rem`
+       (tailwind spacing, font-sizes base, gaps) sem quebrar layout em px */
+    font-size: 17.5px;
+  }
+  body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: var(--bg-base);
+    color: var(--text-1);
+    transition: background 0.25s ease, color 0.25s ease;
+  }
+  #root { height: 100%; }
+}
+
+/* ── Utilities ────────────────────────────────────────────────────────────── */
+@layer utilities {
+  .line-clamp-1 { overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; }
+  .line-clamp-2 { overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-hover); }
+
+  /* Fonte monoespaçada para dados (tabelas, IDs, timestamps).
+     Use em colunas de número e em códigos curtos. */
+  .font-mono-data {
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Tipografia display (Outfit) — identidade Fase 2.
+     Use em H1 de página (title hero). Body e H3+ continuam em Inter.
+     letter-spacing negativo compensa a "largura" natural da Outfit. */
+  .font-display {
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    letter-spacing: -0.02em;
+  }
+  /* Alias pra BrandPage que já usa font-outfit como classe — assim a
+     classe passa a aplicar de fato em vez de ser no-op. */
+  .font-outfit {
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  }
+}
+
+/* ── Animations ───────────────────────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.6; transform: scale(1.06); }
+}
+
+.animate-shimmer {
+  background-image: linear-gradient(
+    90deg,
+    var(--skeleton-base) 0%,
+    var(--skeleton-hi) 50%,
+    var(--skeleton-base) 100%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+.animate-fade-in       { animation: fade-in 150ms ease-out; }
+.animate-slide-in-right { animation: slide-in-right 200ms cubic-bezier(0.4,0,0.2,1); }
+.animate-pulse-soft    { animation: pulse-soft 1.8s ease-in-out infinite; }
+
+/* Respeita preferência do usuário — desliga animações não-essenciais. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-shimmer,
+  .animate-fade-in,
+  .animate-slide-in-right,
+  .animate-pulse-soft {
+    animation: none !important;
+  }
+}
+
+/* ── Card with top accent ─────────────────────────────────────────────────── */
+.card-surface {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.card-surface:hover {
+  box-shadow: var(--card-shadow-hover);
+}
+
+.card-accent-top {
+  border-top-width: 3px;
+  border-top-style: solid;
+}
+
+/* ── Light mode overrides ──────────────────────────────────────────────────
+   Estratégia: entra DEPOIS do layer `utilities` do tailwind — específicidade
+   pelo atributo [data-theme="light"] já é maior. Continuamos usando
+   `!important` onde o Tailwind também usa (utility vs utility), pra evitar
+   "perder" pra outras utilities aplicadas no mesmo elemento.
+   O ideal de longo prazo é migrar cada tela pra CSS vars (`var(--text-1)`),
+   mas esses overrides cobrem legados sem quebrar ninguém. */
+@layer utilities {
+  /* ── Texto ─────────────────────────────────────────────────────────────── */
+  [data-theme="light"] .text-white       { color: #0f172a !important; }
+  [data-theme="light"] .text-gray-100    { color: #1e293b !important; }
+  [data-theme="light"] .text-gray-200    { color: #334155 !important; }
+  [data-theme="light"] .text-gray-300    { color: #475569 !important; }
+  [data-theme="light"] .text-gray-400    { color: #64748b !important; }
+  [data-theme="light"] .text-gray-500    { color: #94a3b8 !important; }
+  [data-theme="light"] .text-gray-600    { color: #94a3b8 !important; }
+  [data-theme="light"] .text-gray-700    { color: #64748b !important; }
+
+  /* Cores semânticas usadas em tags/pills (verde/vermelho) */
+  [data-theme="light"] .text-green-300   { color: #15803d !important; }
+  [data-theme="light"] .text-green-400   { color: #16a34a !important; }
+  [data-theme="light"] .text-red-300     { color: #b91c1c !important; }
+  [data-theme="light"] .text-red-400     { color: #dc2626 !important; }
+  [data-theme="light"] .text-yellow-400  { color: #ca8a04 !important; }
+  [data-theme="light"] .text-yellow-500  { color: #a16207 !important; }
+  [data-theme="light"] .text-brand-400   { color: #0b9692 !important; }
+  [data-theme="light"] .text-brand-500   { color: #087f7c !important; }
+
+  /* ── Fundos (grays) ───────────────────────────────────────────────────── */
+  [data-theme="light"] .bg-gray-950      { background-color: #f8fafc !important; }
+  [data-theme="light"] .bg-gray-900      { background-color: #f8fafc !important; }
+  [data-theme="light"] .bg-gray-800      { background-color: #f1f5f9 !important; }
+  [data-theme="light"] .bg-gray-700      { background-color: #e2e8f0 !important; }
+  [data-theme="light"] .bg-gray-800\/20  { background-color: rgba(241,245,249,0.5) !important; }
+  [data-theme="light"] .bg-gray-800\/60  { background-color: rgba(241,245,249,0.9) !important; }
+  [data-theme="light"] .bg-gray-700\/60  { background-color: rgba(203,213,225,0.4) !important; }
+
+  /* Fundos de "tags coloridas" — versões claras dos tons escuros */
+  [data-theme="light"] .bg-green-900\/60 { background-color: rgba(187,247,208,0.6) !important; }
+  [data-theme="light"] .bg-red-900\/60   { background-color: rgba(254,202,202,0.6) !important; }
+  [data-theme="light"] .bg-yellow-900\/60 { background-color: rgba(254,240,138,0.6) !important; }
+
+  /* ── Hover ─────────────────────────────────────────────────────────────── */
+  [data-theme="light"] .hover\:bg-gray-800:hover  { background-color: #f1f5f9 !important; }
+  [data-theme="light"] .hover\:bg-gray-700:hover  { background-color: #e2e8f0 !important; }
+  [data-theme="light"] .hover\:text-white:hover   { color: #0f172a !important; }
+  [data-theme="light"] .hover\:text-red-400:hover { color: #dc2626 !important; }
+  [data-theme="light"] .hover\:text-brand-300:hover { color: #0c7776 !important; }
+
+  /* ── Bordas ───────────────────────────────────────────────────────────── */
+  [data-theme="light"] .border-gray-800        { border-color: #e2e8f0 !important; }
+  [data-theme="light"] .border-gray-700        { border-color: #cbd5e1 !important; }
+  [data-theme="light"] .border-gray-600        { border-color: #cbd5e1 !important; }
+  [data-theme="light"] .border-gray-800\/60    { border-color: rgba(226,232,240,0.6) !important; }
+  [data-theme="light"] .border-gray-700\/50    { border-color: rgba(203,213,225,0.5) !important; }
+  [data-theme="light"] .border-gray-700\/60    { border-color: rgba(203,213,225,0.6) !important; }
+  [data-theme="light"] .border-brand-500\/80   { border-color: rgba(11,150,146,0.8) !important; }
+  [data-theme="light"] .border-brand-500\/50   { border-color: rgba(11,150,146,0.5) !important; }
+
+  /* ── Overlays semi-transparentes (pages antigas) ───────────────────────── */
+  [data-theme="light"] .border-white\/10 { border-color: rgba(203,213,225,0.5) !important; }
+  [data-theme="light"] .border-white\/5  { border-color: rgba(203,213,225,0.3) !important; }
+  [data-theme="light"] .bg-white\/10     { background-color: rgba(203,213,225,0.2) !important; }
+  [data-theme="light"] .bg-white\/5      { background-color: rgba(203,213,225,0.12) !important; }
+
+  /* ── Placeholders ─────────────────────────────────────────────────────── */
+  [data-theme="light"] .placeholder-gray-500::placeholder { color: #94a3b8 !important; }
+  [data-theme="light"] .placeholder-gray-600::placeholder { color: #64748b !important; }
+}
+
+/* Sombras mais sutis no claro (evita aquele "buraco" que o shadow-2xl faz em bg branco) */
+[data-theme="light"] .shadow-2xl { box-shadow: 0 10px 28px rgba(15,23,42,0.12), 0 4px 10px rgba(15,23,42,0.08) !important; }
+[data-theme="light"] .shadow-xl  { box-shadow: 0 8px 20px rgba(15,23,42,0.10), 0 3px 8px rgba(15,23,42,0.06) !important; }
+[data-theme="light"] .shadow-lg  { box-shadow: 0 4px 12px rgba(15,23,42,0.08), 0 2px 4px rgba(15,23,42,0.05) !important; }
+
+/* Animação dropdown de notificações */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Animação modal (usado pelo ConfirmModal do DS) */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Ring pulse — usado pelo useHighlightRing quando o usuário chega numa
+   tela via ?leadId=X&highlight=1. 3 pulsos em 2.4s (800ms cada). */
+@keyframes ring-pulse {
+  0%   { border-color: var(--brand-500); }
+  50%  { border-color: var(--brand-500); }
+  100% { border-color: var(--border); }
+}
+
+.ring-highlight {
+  animation: ring-pulse 800ms ease-out 3;
+  border-radius: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring-highlight { animation: none; }
+}
+
+/* ── Botão circular "Abrir conversa" em cards:
+   Em desktop, fica oculto até o pai entrar em hover (via group-hover).
+   Em touch (sem hover), precisa estar SEMPRE visível. */
+@media (pointer: coarse) {
+  .open-conversa-btn-touch {
+    opacity: 1 !important;
+  }
+}
