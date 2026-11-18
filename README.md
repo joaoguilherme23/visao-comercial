@@ -4,9 +4,21 @@ Visão Comercial é uma prévia local de uma plataforma para acompanhamento come
 
 > Esta versão foi preparada para demonstração local. Ela usa somente dados sintéticos. As integrações de negócio externas estão desativadas.
 
-![Dashboard da Operação Demonstração com quatro leads sintéticos](docs/images/dashboard.png)
+## Capturas da demonstração
 
-*Dashboard da Operação Demonstração, criado automaticamente com dados fictícios. O estado "sem KPIs configurados" é intencional: os indicadores podem ser configurados na própria aplicação.*
+As três telas abaixo foram capturadas na aplicação local, com quatro leads e oito mensagens fictícias. Os scores e as classificações são exemplos cadastrados; nenhuma análise externa por IA foi executada.
+
+![Visão geral com oito KPIs calculados sobre dados fictícios](docs/images/dashboard.png)
+
+*Visão geral: quatro leads ativos, score médio de 7,5, 100% dos leads identificados e oito mensagens — quatro recebidas e quatro enviadas.*
+
+![Gráficos de temperatura, funil e horários de interação](docs/images/funil-e-temperatura.png)
+
+*Distribuição dos leads por temperatura, etapas do funil e horários das mensagens da demonstração.*
+
+![Faixas de qualificação e indicadores de mensagens](docs/images/qualificacao-e-mensagens.png)
+
+*Detalhamento por faixa de score, percentual de identificação e volume de mensagens. Os rótulos de IA da interface representam dados simulados nesta prévia.*
 
 ## Recursos incluídos
 
@@ -52,7 +64,7 @@ O setup cria os segredos e a senha aleatória da demonstração local. Para entr
 1. Entre com a conta de demonstração.
 2. Abra **Minhas empresas** e selecione **Operação Demonstração**.
 3. Use **Dashboard**, **Conversas** e **Config KPIs**.
-4. No Dashboard, configure os indicadores desejados para a operação de demonstração.
+4. O Dashboard inicia com oito KPIs de demonstração. Em **Config KPIs**, escolha os indicadores desejados e clique em **Salvar**.
 
 O código inclui um Kanban. Na validação desta prévia, a tela permaneceu em carregamento e seu uso não foi confirmado; a causa ainda não foi determinada.
 

@@ -5,9 +5,12 @@ from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import select
 
+from app.core.bootstrap import assert_local_database_target
 from app.core.config import settings
 from app.core.database import AsyncSessionLocal, engine
 from app.core.security import hash_password
+from app.kpi_catalog import BUILTIN_KPIS
+from app.models.dashboard import DashboardConfig, KpiCatalogo
 from app.models.lead import Lead
 from app.models.message import Mensagem
 from app.models.tenant import Cliente
@@ -22,7 +25,14 @@ DEMO_LEADS = (
 )
 
 
+DEMO_KPI_SLUGS = (
+    "total_leads", "leads_ativos", "score_medio", "pct_leads_identificados",
+    "total_mensagens", "msgs_recebidas", "msgs_enviadas", "pct_msgs_recebidas",
+)
+
+
 async def main() -> None:
+    assert_local_database_target()
     async with AsyncSessionLocal() as db:
         user = await db.scalar(select(User).where(User.email == settings.SUPERADMIN_EMAIL))
         if user is None:
@@ -84,6 +94,23 @@ async def main() -> None:
                         enviada_em=now - timedelta(minutes=19 - index),
                     ),
                 ])
+        # Indicadores reais calculados sobre os registros sintéticos da prévia.
+        # Inserir somente o que falta preserva customizações feitas pelo usuário.
+        existing_kpis = set((await db.scalars(select(KpiCatalogo.slug))).all())
+        for definition in BUILTIN_KPIS:
+            if definition["slug"] in DEMO_KPI_SLUGS and definition["slug"] not in existing_kpis:
+                db.add(KpiCatalogo(**definition, is_builtin=True))
+        dashboard = await db.scalar(
+            select(DashboardConfig).where(DashboardConfig.cliente_id == tenant.id)
+        )
+        if dashboard is None:
+            db.add(DashboardConfig(
+                cliente_id=tenant.id,
+                updated_by=user.id,
+                kpis=[{"slug": slug, "ordem": index, "visivel": True}
+                      for index, slug in enumerate(DEMO_KPI_SLUGS)],
+                layout="grid",
+            ))
         await db.commit()
     await engine.dispose()
 
